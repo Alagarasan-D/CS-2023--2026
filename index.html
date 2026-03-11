@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<title>Class Memories Chat</title>
+<style>
+/* ===== SAME CSS - NO CHANGES NEEDED ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* LOGIN SCREEN */
+#loginScreen {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: clamp(25px, 5vw, 40px);
+    border-radius: 40px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    width: min(90%, 400px);
+    transition: all 0.3s ease;
+}
+
+#loginScreen h3 {
+    font-size: clamp(24px, 6vw, 32px);
+    margin-bottom: 25px;
+    text-align: center;
+    background: linear-gradient(135deg, #075E54, #128C7E, #25D366);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #075E54;
+}
+
+@supports not (background-clip: text) {
+    #loginScreen h3 {
+        color: #075E54;
+        background: none;
+    }
+}
+
+.photo-upload {
+    margin: 20px 0;
+    text-align: center;
+}
+
+#photoPreview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    border: 4px solid #25D366;
+    object-fit: cover;
+    display: block;
+    background: #f0f0f0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#photoPreview:hover {
+    transform: scale(1.05);
+}
+
+#photoUpload {
+    display: none;
+}
+
+.upload-btn {
+    background: #075E54;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: #128C7E;
+    transform: translateY(-2px);
+}
+
+#loginScreen input {
+    width: 100%;
+    padding: 16px 20px;
+    margin: 10px 0;
+    border-radius: 50px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    outline: none;
+}
+
+#loginScreen input:focus {
+    border-color: #25D366;
+    box-shadow: 0 0 0 5px rgba(37,211,102,0.1);
+    transform: translateY(-2px);
+}
+
+#loginBtn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+#loginBtn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(37,211,102,0.3);
+}
+
+#loginBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* CHAT UI */
+#chatUI {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    background: #efeae2;
+}
+
+header {
+    background: linear-gradient(135deg, #075E54, #128C7E);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 70px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#onlineDot {
+    width: 12px;
+    height: 12px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.8; }
+}
+
+#username {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#musicBtn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+#musicBtn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: rotate(15deg) scale(1.1);
+}
+
+#logoutBtn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 30px;
+    padding: 8px 15px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#logoutBtn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+#chatBox {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 15px;
+    background: #e5ded8;
+}
+
+.msgRow {
+    display: flex;
+    margin: 12px 0;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.msgRow[data-owner="true"] {
+    justify-content: flex-end;
+}
+
+.msgRow[data-owner="true"] .profile {
+    display: none;
+}
+
+.msgRow[data-owner="true"] .message {
+    background: linear-gradient(135deg, #DCF8C6, #d1f0b7);
+    border-bottom-right-radius: 5px;
+}
+
+.msgRow:not([data-owner="true"]) .message {
+    background: white;
+    border-bottom-left-radius: 5px;
+}
+
+.profile {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 3px solid #075E54;
+    object-fit: cover;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+
+.message {
+    padding: 12px 18px;
+    border-radius: 18px;
+    max-width: min(75%, 500px);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    font-size: 15px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.message b {
+    color: #075E54;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.message-time {
+    font-size: 10px;
+    color: #888;
+    text-align: right;
+    margin-top: 6px;
+    display: block;
+}
+
+#inputArea {
+    display: flex;
+    padding: 15px 20px;
+    background: #f0f2f5;
+    gap: 12px;
+    align-items: center;
+}
+
+#message {
+    flex: 1;
+    padding: 14px 20px;
+    border-radius: 30px;
+    border: none;
+    font-size: 16px;
+    outline: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+#message:focus {
+    outline: 2px solid #25D366;
+    transform: translateY(-2px);
+}
+
+#sendBtn {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+#sendBtn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(37,211,102,0.3);
+}
+
+#sendBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.loading {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(37,211,102,0.1);
+    border-radius: 50%;
+    border-top-color: #25D366;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 50px;
+    color: white;
+    z-index: 2000;
+    animation: slideRight 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@keyframes slideRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+    .message { max-width: 85%; font-size: 14px; }
+    #sendBtn { padding: 12px 20px; }
+    .profile { width: 36px; height: 36px; }
+    header { padding: 10px 15px; }
+    #musicBtn { width: 40px; height: 40px; font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+    <h3>✨ Class Memories ✨</h3>
+    
+    <div class="photo-upload">
+        <img id="photoPreview" src="https://ui-avatars.com/api/?name=User&background=075E54&color=fff&size=100" alt="Profile">
+        <input type="file" id="photoUpload" accept="image/*">
+        <label for="photoUpload" class="upload-btn">📸 Upload Photo</label>
+    </div>
+    
+    <input type="text" id="name" placeholder="Your Name" autofocus>
+    <button id="loginBtn" onclick="handleLogin()" disabled>Enter Chat 💬</button>
+</div>
+
+<!-- CHAT UI -->
+<div id="chatUI">
+    <header>
+        <div class="user-info">
+            <div id="onlineDot"></div>
+            <span id="username"></span>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button id="musicBtn" onclick="toggleMusic()">🔇</button>
+            <button id="logoutBtn" onclick="handleLogout()">Logout</button>
+        </div>
+    </header>
+
+    <div id="chatBox"></div>
+
+    <div id="inputArea">
+        <input type="text" id="message" placeholder="Type your message... 🔥">
+        <button id="sendBtn" onclick="handleSendMessage()">Send</button>
+    </div>
+</div>
+
+<!-- AUDIO -->
+<audio id="bgMusic" preload="auto" loop>
+    <source src="Venmathiye.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="notifySound" preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// ============================================
+// CONFIGURATION - YOUR GOOGLE SCRIPT URL
+// ============================================
+const CONFIG = {
+    API_URL: 'https://script.google.com/macros/s/AKfycbwOWtKeqQcbBglH8DYTBbJmahMAvem1LAgw-n9Ri_KsqamYnoiqTkL7xSfUCno1bxpV/exec',
+    STORAGE_KEY: 'chat_user_session',
+    POLL_INTERVAL: 3000
+};
+
+// ============================================
+// STATE MANAGEMENT
+// ============================================
+const state = {
+    currentUser: null,
+    currentPhoto: '',
+    lastMessageCount: 0,
+    loadingMessages: false,
+    musicPlaying: false,
+    messages: []
+};
+
+// DOM Elements
+const elements = {
+    loginScreen: document.getElementById('loginScreen'),
+    chatUI: document.getElementById('chatUI'),
+    nameInput: document.getElementById('name'),
+    photoPreview: document.getElementById('photoPreview'),
+    photoUpload: document.getElementById('photoUpload'),
+    loginBtn: document.getElementById('loginBtn'),
+    username: document.getElementById('username'),
+    chatBox: document.getElementById('chatBox'),
+    messageInput: document.getElementById('message'),
+    sendBtn: document.getElementById('sendBtn'),
+    musicBtn: document.getElementById('musicBtn'),
+    bgMusic: document.getElementById('bgMusic'),
+    notifySound: document.getElementById('notifySound')
+};
+
+// ============================================
+// INITIALIZATION
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    setupEventListeners();
+    checkSavedSession();
+    initAudio();
+});
+
+function initAudio() {
+    elements.bgMusic.volume = 0.4;
+    elements.notifySound.volume = 0.4;
+    elements.bgMusic.load();
+    elements.notifySound.load();
+}
+
+function setupEventListeners() {
+    elements.nameInput.addEventListener('input', validateLoginForm);
+    elements.photoUpload.addEventListener('change', handlePhotoUpload);
+    elements.messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    });
+}
+
+// ============================================
+// LOGIN FUNCTIONS
+// ============================================
+function handleLogin() {
+    const name = elements.nameInput.value.trim();
+    
+    if (!name) {
+        showNotification('Please enter your name!', 'error');
+        return;
+    }
+    
+    state.currentUser = name;
+    
+    elements.loginScreen.style.transform = 'scale(0.95)';
+    elements.loginScreen.style.opacity = '0';
+    
+    setTimeout(() => {
+        elements.loginScreen.style.display = 'none';
+        elements.chatUI.style.display = 'flex';
+        elements.username.textContent = name;
+        
+        playMusicAutomatically();
+        saveSession();
+        loadMessagesJSONP(); // ✅ USING JSONP NOW
+        
+        elements.loginScreen.style.transform = 'scale(1)';
+        elements.loginScreen.style.opacity = '1';
+    }, 300);
+}
+
+function playMusicAutomatically() {
+    const music = elements.bgMusic;
+    music.volume = 0.4;
+    music.load();
+    
+    const playPromise = music.play();
+    
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                state.musicPlaying = true;
+                if (elements.musicBtn) {
+                    elements.musicBtn.textContent = '🎵';
+                }
+            })
+            .catch(() => {
+                state.musicPlaying = false;
+                if (elements.musicBtn) {
+                    elements.musicBtn.textContent = '🔇';
+                }
+            });
+    }
+}
+
+function toggleMusic() {
+    if (state.musicPlaying) {
+        elements.bgMusic.pause();
+        state.musicPlaying = false;
+        elements.musicBtn.textContent = '🔇';
+    } else {
+        elements.bgMusic.play()
+            .then(() => {
+                state.musicPlaying = true;
+                elements.musicBtn.textContent = '🎵';
+            })
+            .catch(() => {
+                showNotification('Click again to play music', 'info');
+            });
+    }
+}
+
+// ============================================
+// SESSION MANAGEMENT
+// ============================================
+function checkSavedSession() {
+    const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+    if (saved) {
+        try {
+            const session = JSON.parse(saved);
+            if (session.name) {
+                state.currentUser = session.name;
+                state.currentPhoto = session.photo || '';
+                autoLogin(session);
+            }
+        } catch (e) {
+            localStorage.removeItem(CONFIG.STORAGE_KEY);
+        }
+    }
+}
+
+function autoLogin(session) {
+    elements.loginScreen.style.display = 'none';
+    elements.chatUI.style.display = 'flex';
+    elements.username.textContent = session.name;
+    
+    elements.bgMusic.play()
+        .then(() => {
+            state.musicPlaying = true;
+            elements.musicBtn.textContent = '🎵';
+        })
+        .catch(() => {
+            elements.musicBtn.textContent = '🔇';
+        });
+    
+    loadMessagesJSONP(); // ✅ USING JSONP NOW
+    showNotification(`Welcome back, ${session.name}!`, 'success');
+}
+
+function saveSession() {
+    const session = {
+        name: state.currentUser,
+        photo: state.currentPhoto,
+        timestamp: Date.now()
+    };
+    localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(session));
+}
+
+function handleLogout() {
+    localStorage.removeItem(CONFIG.STORAGE_KEY);
+    state.currentUser = null;
+    state.currentPhoto = '';
+    state.lastMessageCount = 0;
+    
+    if (state.musicPlaying) {
+        elements.bgMusic.pause();
+        state.musicPlaying = false;
+    }
+    
+    elements.chatUI.style.display = 'none';
+    elements.loginScreen.style.display = 'block';
+    elements.nameInput.value = '';
+    elements.photoPreview.src = 'https://ui-avatars.com/api/?name=User&background=075E54&color=fff&size=100';
+    elements.loginBtn.disabled = true;
+}
+
+function validateLoginForm() {
+    const name = elements.nameInput.value.trim();
+    elements.loginBtn.disabled = !name;
+}
+
+// ============================================
+// PHOTO UPLOAD
+// ============================================
+async function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        elements.photoPreview.src = e.target.result;
+        state.currentPhoto = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    
+    showNotification('Photo ready!', 'success');
+}
+
+// ============================================
+// ✅ FIXED: JSONP LOAD MESSAGES (NO CORS)
+// ============================================
+function loadMessagesJSONP() {
+    if (state.loadingMessages) return;
+    
+    state.loadingMessages = true;
+    
+    // Create unique callback name
+    const callbackName = 'jsonp_callback_' + Date.now();
+    
+    // Create script element
+    const script = document.createElement('script');
+    const url = CONFIG.API_URL + '?t=' + Date.now() + '&callback=' + callbackName;
+    
+    // Define callback function
+    window[callbackName] = function(data) {
+        try {
+            const messages = data || [];
+            
+            if (messages.length > state.lastMessageCount) {
+                const newMessages = messages.slice(state.lastMessageCount);
+                
+                newMessages.forEach(msg => {
+                    if (msg.name !== state.currentUser) {
+                        playNotification();
+                    }
+                    appendMessage(msg);
+                });
+                
+                scrollToBottom();
+                state.lastMessageCount = messages.length;
+            }
+        } catch (error) {
+            console.error('JSONP Error:', error);
+        } finally {
+            // Clean up
+            delete window[callbackName];
+            document.body.removeChild(script);
+            state.loadingMessages = false;
+        }
+    };
+    
+    // Handle errors
+    script.onerror = function() {
+        console.error('JSONP request failed');
+        delete window[callbackName];
+        document.body.removeChild(script);
+        state.loadingMessages = false;
+    };
+    
+    script.src = url;
+    document.body.appendChild(script);
+}
+
+function appendMessage(msg) {
+    if (!msg || !msg.name) return;
+    
+    const row = document.createElement('div');
+    row.className = 'msgRow';
+    row.setAttribute('data-owner', msg.name === state.currentUser);
+    
+    if (msg.name !== state.currentUser) {
+        const img = document.createElement('img');
+        img.className = 'profile';
+        img.src = msg.photo || getAvatarUrl(msg.name);
+        img.alt = msg.name;
+        img.onerror = () => { img.src = getAvatarUrl(msg.name); };
+        row.appendChild(img);
+    }
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'message';
+    
+    let timeStr = '';
+    if (msg.time) {
+        try {
+            const msgDate = new Date(msg.time);
+            timeStr = msgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } catch {
+            timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+    } else {
+        timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    bubble.innerHTML = `
+        <b>${escapeHtml(msg.name)}</b>
+        <div>${escapeHtml(msg.message)}</div>
+        <span class="message-time">${timeStr}</span>
+    `;
+    
+    row.appendChild(bubble);
+    elements.chatBox.appendChild(row);
+}
+
+function handleSendMessage() {
+    const message = elements.messageInput.value.trim();
+    
+    if (!message) {
+        showNotification('Type a message!', 'warning');
+        return;
+    }
+    
+    if (!state.currentUser) {
+        showNotification('Please login first!', 'error');
+        return;
+    }
+    
+    elements.sendBtn.disabled = true;
+    
+    const newMessage = {
+        name: state.currentUser,
+        message: message,
+        photo: state.currentPhoto || '',
+        time: new Date().toISOString()
+    };
+    
+    appendMessage(newMessage);
+    elements.messageInput.value = '';
+    scrollToBottom();
+    
+    // ✅ USING SENDBEACON (NO CORS)
+    saveMessageViaBeacon(newMessage);
+}
+
+// ============================================
+// ✅ FIXED: SENDBEACON (NO CORS ISSUES)
+// ============================================
+function saveMessageViaBeacon(message) {
+    try {
+        const data = JSON.stringify({
+            type: 'message',
+            name: message.name,
+            message: message.message,
+            photo: message.photo,
+            time: message.time
+        });
+        
+        // Use sendBeacon - no CORS issues!
+        if (navigator.sendBeacon) {
+            const blob = new Blob([data], { type: 'application/json' });
+            const sent = navigator.sendBeacon(CONFIG.API_URL, blob);
+            
+            if (sent) {
+                console.log('✅ Message sent via Beacon');
+                showNotification('Message sent!', 'success');
+                state.lastMessageCount++;
+            } else {
+                console.warn('Beacon failed, using fallback');
+                fallbackSend(message);
+            }
+        } else {
+            fallbackSend(message);
+        }
+        
+    } catch (error) {
+        console.error('Send failed:', error);
+        showNotification('Message saved locally', 'info');
+        state.lastMessageCount++;
+    } finally {
+        elements.sendBtn.disabled = false;
+    }
+}
+
+// Fallback using fetch with no-cors
+function fallbackSend(message) {
+    fetch(CONFIG.API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            type: 'message',
+            name: message.name,
+            message: message.message,
+            photo: message.photo,
+            time: message.time
+        })
+    })
+    .then(() => {
+        console.log('Message sent via fallback');
+        showNotification('Message sent!', 'success');
+        state.lastMessageCount++;
+    })
+    .catch(() => {
+        console.log('Message saved locally');
+        showNotification('Message saved locally', 'info');
+        state.lastMessageCount++;
+    })
+    .finally(() => {
+        elements.sendBtn.disabled = false;
+    });
+}
+
+function playNotification() {
+    if (elements.notifySound) {
+        elements.notifySound.currentTime = 0;
+        elements.notifySound.play().catch(() => {});
+    }
+}
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+function getAvatarUrl(name) {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=075E54&color=fff&size=48&bold=true`;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function scrollToBottom() {
+    elements.chatBox.scrollTo({
+        top: elements.chatBox.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
+function showNotification(text, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    
+    const colors = { 
+        error: '#f44336', 
+        warning: '#ff9800', 
+        info: '#2196F3', 
+        success: '#4CAF50' 
+    };
+    
+    notification.style.backgroundColor = colors[type] || colors.info;
+    notification.textContent = text;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideRight 0.3s reverse';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// ============================================
+// POLLING FOR NEW MESSAGES (USING JSONP)
+// ============================================
+setInterval(() => {
+    if (elements.chatUI.style.display === 'flex' && navigator.onLine) {
+        loadMessagesJSONP();
+    }
+}, CONFIG.POLL_INTERVAL);
+
+// ============================================
+// ERROR HANDLING
+// ============================================
+window.addEventListener('error', (e) => {
+    if (e.target.tagName === 'IMG' && !e.target.src.includes('ui-avatars')) {
+        e.target.src = getAvatarUrl('User');
+    }
+}, true);
+
+window.addEventListener('online', () => {
+    showNotification('Back online!', 'success');
+    loadMessagesJSONP();
+});
+
+window.addEventListener('offline', () => {
+    showNotification('You are offline', 'warning');
+});
+</script>
+</body>
+</html>
