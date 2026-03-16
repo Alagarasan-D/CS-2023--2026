@@ -1,913 +1,778 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>Class Memories Chat</title>
-<style>
-/* ===== SAME CSS - NO CHANGES NEEDED ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-/* LOGIN SCREEN */
-#loginScreen {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: clamp(25px, 5vw, 40px);
-    border-radius: 40px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-    width: min(90%, 400px);
-    transition: all 0.3s ease;
-}
-
-#loginScreen h3 {
-    font-size: clamp(24px, 6vw, 32px);
-    margin-bottom: 25px;
-    text-align: center;
-    background: linear-gradient(135deg, #075E54, #128C7E, #25D366);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: #075E54;
-}
-
-@supports not (background-clip: text) {
-    #loginScreen h3 {
-        color: #075E54;
-        background: none;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✨ LUMINA LOADER · animated progress</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-}
 
-.photo-upload {
-    margin: 20px 0;
-    text-align: center;
-}
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 30% 30%, #1a1e2f, #0b0d17);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', system-ui, 'Helvetica Neue', sans-serif;
+      padding: 1rem;
+    }
 
-#photoPreview {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    border: 4px solid #25D366;
-    object-fit: cover;
-    display: block;
-    background: #f0f0f0;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
+    /* main card – glossy dark glass */
+    .loader-card {
+      background: rgba(18, 22, 40, 0.65);
+      backdrop-filter: blur(14px) saturate(180%);
+      -webkit-backdrop-filter: blur(14px) saturate(180%);
+      border-radius: 3.5rem 3.5rem 2.5rem 2.5rem;
+      box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 
+                  inset 0 1px 2px rgba(255, 255, 255, 0.08),
+                  0 0 0 1px rgba(120, 160, 255, 0.15);
+      padding: 3rem 3rem 3.5rem 3rem;
+      width: min(520px, 98%);
+      transition: box-shadow 0.3s;
+      border: 1px solid rgba(110, 150, 255, 0.2);
+      position: relative;
+    }
 
-#photoPreview:hover {
-    transform: scale(1.05);
-}
+    /* title + floating particles */
+    .title-section {
+      text-align: center;
+      margin-bottom: 2.2rem;
+      position: relative;
+    }
 
-#photoUpload {
-    display: none;
-}
+    .title-section h1 {
+      font-size: 2.2rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      background: linear-gradient(130deg, #c0d4ff, #a6b9ff, #c0e1ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 12px #3f6eff55, 0 0 25px #2f4fef30;
+      margin-bottom: 0.4rem;
+      position: relative;
+      z-index: 3;
+    }
 
-.upload-btn {
-    background: #075E54;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
+    .glow-sub {
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: #9bb3ffcc;
+      text-transform: uppercase;
+      word-spacing: 6px;
+      backdrop-filter: blur(4px);
+    }
 
-.upload-btn:hover {
-    background: #128C7E;
-    transform: translateY(-2px);
-}
+    /* progress ring container */
+    .ring-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1.8rem 0 2rem 0;
+      filter: drop-shadow(0 0 18px #3f7eff70);
+    }
 
-#loginScreen input {
-    width: 100%;
-    padding: 16px 20px;
-    margin: 10px 0;
-    border-radius: 50px;
-    border: 2px solid #e0e0e0;
-    transition: all 0.3s ease;
-    font-size: 16px;
-    outline: none;
-}
+    .progress-ring {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
 
-#loginScreen input:focus {
-    border-color: #25D366;
-    box-shadow: 0 0 0 5px rgba(37,211,102,0.1);
-    transform: translateY(-2px);
-}
+    .progress-ring svg {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      transform: rotate(-90deg);  /* start from top */
+    }
 
-#loginBtn {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #25D366, #128C7E);
-    border: none;
-    border-radius: 50px;
-    color: white;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 20px;
-}
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.2s ease-out;
+    }
 
-#loginBtn:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(37,211,102,0.3);
-}
+    /* background grey ring */
+    .ring-bg {
+      stroke: rgba(50, 65, 110, 0.4);
+      stroke-width: 8;
+    }
 
-#loginBtn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
+    /* animated progress ring – shimmering gradient + moving light */
+    .ring-fill {
+      stroke: url(#shimmerGradient);
+      stroke-width: 9;
+      filter: drop-shadow(0 0 9px #4d7cff) drop-shadow(0 0 18px #2d4fcf);
+      stroke-dasharray: 502; /* circumference approx (2 * pi * 80 ≈ 502.4) */
+      stroke-dashoffset: 502;
+      transition: stroke-dashoffset 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    }
 
-/* CHAT UI */
-#chatUI {
-    display: none;
-    width: 100%;
-    height: 100vh;
-    flex-direction: column;
-    background: #efeae2;
-}
+    /* inner percentage with floating glow */
+    .percentage-badge {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 500;
+      backdrop-filter: blur(2px);
+    }
 
-header {
-    background: linear-gradient(135deg, #075E54, #128C7E);
-    color: white;
-    padding: 15px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-height: 70px;
-}
+    .percent-big {
+      font-size: 3.3rem;
+      font-weight: 600;
+      background: linear-gradient(145deg, #ffffff, #d6e4ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1;
+      text-shadow: 0 0 25px #6d9eff, 0 0 45px #345bdb;
+      filter: drop-shadow(0 4px 6px #00000050);
+      animation: softPulse 2.2s infinite alternate;
+    }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+    .percent-big small {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: #b5cdff;
+      text-shadow: 0 0 20px #4d7aff;
+    }
 
-#onlineDot {
-    width: 12px;
-    height: 12px;
-    background: #4ade80;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-}
+    .status-label {
+      font-size: 0.95rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #adc6ff;
+      margin-top: 6px;
+      background: rgba(18, 22, 40, 0.6);
+      padding: 0.3rem 1.4rem;
+      border-radius: 50px;
+      border: 1px solid #3d5488;
+      box-shadow: 0 0 15px #2940aa40;
+      backdrop-filter: blur(8px);
+    }
 
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.8; }
-}
+    /* extra animated glowing bar under ring */
+    .pulse-bar {
+      width: 220px;
+      height: 5px;
+      background: linear-gradient(90deg, transparent, #6f96ff, #aac3ff, #6f96ff, transparent);
+      margin: 1rem auto 1.8rem auto;
+      border-radius: 10px;
+      opacity: 0.7;
+      animation: barShimmer 2.8s infinite linear;
+      background-size: 200% 100%;
+    }
 
-#username {
-    font-size: 18px;
-    font-weight: 600;
-}
+    /* sleek slider + button row */
+    .action-panel {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+    }
 
-#musicBtn {
-    background: rgba(255,255,255,0.2);
-    border: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    font-size: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
-}
+    .range-slider {
+      flex: 1 1 200px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(10, 14, 30, 0.7);
+      padding: 0.5rem 1rem;
+      border-radius: 60px;
+      border: 1px solid #314d8a;
+      backdrop-filter: blur(10px);
+    }
 
-#musicBtn:hover {
-    background: rgba(255,255,255,0.3);
-    transform: rotate(15deg) scale(1.1);
-}
+    .range-slider i {
+      color: #9eb9ff;
+      font-style: normal;
+      font-size: 1.2rem;
+      text-shadow: 0 0 8px #4264dc;
+    }
 
-#logoutBtn {
-    background: rgba(255,255,255,0.2);
-    border: none;
-    border-radius: 30px;
-    padding: 8px 15px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+    .range-slider input {
+      width: 140px;
+      height: 6px;
+      -webkit-appearance: none;
+      background: linear-gradient(90deg, #2c3e7e, #748dff, #2c3e7e);
+      border-radius: 10px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 0 15px #3152d0;
+    }
 
-#logoutBtn:hover {
-    background: rgba(255,255,255,0.3);
-}
+    .range-slider input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #87a9ff, 0 0 40px #ffffffb3;
+      border: 2px solid #b8d0ff;
+      transition: 0.1s;
+    }
 
-#chatBox {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 15px;
-    background: #e5ded8;
-}
+    .range-slider input::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: #eef3ff;
+    }
 
-.msgRow {
-    display: flex;
-    margin: 12px 0;
-    animation: slideIn 0.3s ease;
-}
+    .current-value {
+      min-width: 3.2rem;
+      text-align: center;
+      font-weight: 600;
+      color: #eef5ff;
+      text-shadow: 0 0 15px #3f7bff;
+    }
 
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+    /* floating micro animations (background energy) */
+    .energy-dots {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: inherit;
+    }
 
-.msgRow[data-owner="true"] {
-    justify-content: flex-end;
-}
+    .energy-dots span {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: rgba(150, 190, 255, 0.35);
+      border-radius: 50%;
+      box-shadow: 0 0 15px #799cff, 0 0 25px #4264dc;
+      animation: floatDot 7s infinite alternate ease-in-out;
+    }
 
-.msgRow[data-owner="true"] .profile {
-    display: none;
-}
+    /* keyframes */
+    @keyframes softPulse {
+      0% { opacity: 0.9; text-shadow: 0 0 15px #5b80ff, 0 0 30px #2643b3; }
+      100% { opacity: 1; text-shadow: 0 0 25px #96b2ff, 0 0 55px #3e68ff; }
+    }
 
-.msgRow[data-owner="true"] .message {
-    background: linear-gradient(135deg, #DCF8C6, #d1f0b7);
-    border-bottom-right-radius: 5px;
-}
+    @keyframes barShimmer {
+      0% { background-position: 0% 0; }
+      100% { background-position: 200% 0; }
+    }
 
-.msgRow:not([data-owner="true"]) .message {
-    background: white;
-    border-bottom-left-radius: 5px;
-}
+    @keyframes floatDot {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+      50% { transform: translate(20px, -15px) scale(1.6); opacity: 0.7; }
+      100% { transform: translate(-20px, 25px) scale(1); opacity: 0.3; }
+    }
 
-.profile {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    margin-right: 10px;
-    border: 3px solid #075E54;
-    object-fit: cover;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    flex-shrink: 0;
-}
+    /* random dot positions (generated by js later) */
+    
+    /* ===== FINGERPRINT SENSOR STYLES ===== */
+    .fingerprint-sensor {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(30, 40, 70, 0.7);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(100, 150, 255, 0.5);
+      box-shadow: 0 0 20px rgba(70, 130, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 20;
+      animation: fingerprintPulse 2.5s infinite alternate;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
 
-.message {
-    padding: 12px 18px;
-    border-radius: 18px;
-    max-width: min(75%, 500px);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-    font-size: 15px;
-    line-height: 1.5;
-    word-wrap: break-word;
-}
+    .fingerprint-sensor:hover {
+      border-color: #7f9eff;
+      box-shadow: 0 0 40px #3f7bff, 0 0 80px #1f3a8a;
+      transform: translateX(-50%) scale(1.08);
+    }
 
-.message b {
-    color: #075E54;
-    font-size: 14px;
-    display: block;
-    margin-bottom: 5px;
-}
+    .fingerprint-sensor:active {
+      transform: translateX(-50%) scale(0.95);
+    }
 
-.message-time {
-    font-size: 10px;
-    color: #888;
-    text-align: right;
-    margin-top: 6px;
-    display: block;
-}
+    .fingerprint-icon {
+      width: 45px;
+      height: 45px;
+      background: radial-gradient(circle at 30% 30%, #aac3ff, #3f74ee);
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: iconGlow 3s infinite alternate;
+    }
 
-#inputArea {
-    display: flex;
-    padding: 15px 20px;
-    background: #f0f2f5;
-    gap: 12px;
-    align-items: center;
-}
+    .fingerprint-icon::before {
+      content: "";
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      background: transparent;
+      border: 2.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 50%;
+      box-shadow: 0 0 20px #aac3ff, 0 0 40px #4d7cff;
+      animation: rippleEffect 2s infinite;
+    }
 
-#message {
-    flex: 1;
-    padding: 14px 20px;
-    border-radius: 30px;
-    border: none;
-    font-size: 16px;
-    outline: 2px solid transparent;
-    transition: all 0.3s ease;
-}
+    .fingerprint-icon::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 50%;
+      box-shadow: 0 0 30px white, 0 0 60px #7f9eff;
+      animation: corePulse 1.5s infinite alternate;
+    }
 
-#message:focus {
-    outline: 2px solid #25D366;
-    transform: translateY(-2px);
-}
+    /* Mass effect style animations */
+    .mass-effect-ripple {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(100, 150, 255, 0.3);
+      box-shadow: 0 0 50px #4d7cff, 0 0 100px #1f4dff;
+      animation: massExpand 0.8s ease-out forwards;
+      pointer-events: none;
+      z-index: 25;
+    }
 
-#sendBtn {
-    padding: 14px 30px;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #25D366, #128C7E);
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
+    .mass-effect-wave {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px;
+      height: 70px;
+      border: 3px solid rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      box-shadow: 0 0 40px #7f9eff, inset 0 0 40px #3f7bff;
+      animation: massWave 1.2s infinite;
+      pointer-events: none;
+      z-index: 26;
+    }
 
-#sendBtn:hover:not(:disabled) {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(37,211,102,0.3);
-}
+    .mass-effect-particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #aac3ff;
+      border-radius: 50%;
+      box-shadow: 0 0 30px #4d7cff;
+      pointer-events: none;
+      z-index: 30;
+      animation: particleFly 1s ease-out forwards;
+    }
 
-#sendBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+    @keyframes fingerprintPulse {
+      0% { box-shadow: 0 0 20px rgba(70, 130, 255, 0.4), 0 0 40px rgba(40, 80, 200, 0.2); }
+      100% { box-shadow: 0 0 50px rgba(70, 130, 255, 0.8), 0 0 100px rgba(40, 80, 200, 0.4); }
+    }
 
-.loading {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    border: 4px solid rgba(37,211,102,0.1);
-    border-radius: 50%;
-    border-top-color: #25D366;
-    animation: spin 0.8s linear infinite;
-}
+    @keyframes iconGlow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.3); }
+    }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+    @keyframes rippleEffect {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 0.4; }
+      100% { transform: scale(0.8); opacity: 0.8; }
+    }
 
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    border-radius: 50px;
-    color: white;
-    z-index: 2000;
-    animation: slideRight 0.3s ease;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-}
+    @keyframes corePulse {
+      0% { transform: scale(0.8); opacity: 0.7; }
+      100% { transform: scale(1.3); opacity: 1; }
+    }
 
-@keyframes slideRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
+    @keyframes massExpand {
+      0% { width: 70px; height: 70px; opacity: 0.8; }
+      100% { width: 200px; height: 200px; opacity: 0; }
+    }
 
-@media (max-width: 480px) {
-    .message { max-width: 85%; font-size: 14px; }
-    #sendBtn { padding: 12px 20px; }
-    .profile { width: 36px; height: 36px; }
-    header { padding: 10px 15px; }
-    #musicBtn { width: 40px; height: 40px; font-size: 20px; }
-}
-</style>
+    @keyframes massWave {
+      0% { width: 70px; height: 70px; opacity: 0.8; border-width: 3px; }
+      100% { width: 180px; height: 180px; opacity: 0; border-width: 1px; }
+    }
+
+    @keyframes particleFly {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--x, 100px), var(--y, -100px)) scale(0); opacity: 0; }
+    }
+
+    .fingerprint-pressed {
+      border-color: #ffaa33;
+      box-shadow: 0 0 60px #ffaa33, 0 0 120px #ff7700;
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    .loader-card {
+      padding-bottom: 5rem; /* Make space for fingerprint sensor */
+    }
+  </style>
 </head>
 <body>
+  <div class="loader-card">
+    <!-- decorative floating orbs (added via js) -->
+    <div class="energy-dots" id="energyDots"></div>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
-    <h3>✨ Class Memories ✨</h3>
-    
-    <div class="photo-upload">
-        <img id="photoPreview" src="https://ui-avatars.com/api/?name=User&background=075E54&color=fff&size=100" alt="Profile">
-        <input type="file" id="photoUpload" accept="image/*">
-        <label for="photoUpload" class="upload-btn">📸 Upload Photo</label>
+    <!-- FINGERPRINT SENSOR - BOTTOM CENTER -->
+    <div class="fingerprint-sensor" id="fingerprintSensor">
+      <div class="fingerprint-icon"></div>
     </div>
-    
-    <input type="text" id="name" placeholder="Your Name" autofocus>
-    <button id="loginBtn" onclick="handleLogin()" disabled>Enter Chat 💬</button>
-</div>
 
-<!-- CHAT UI -->
-<div id="chatUI">
-    <header>
-        <div class="user-info">
-            <div id="onlineDot"></div>
-            <span id="username"></span>
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <button id="musicBtn" onclick="toggleMusic()">🔇</button>
-            <button id="logoutBtn" onclick="handleLogout()">Logout</button>
-        </div>
-    </header>
-
-    <div id="chatBox"></div>
-
-    <div id="inputArea">
-        <input type="text" id="message" placeholder="Type your message... 🔥">
-        <button id="sendBtn" onclick="handleSendMessage()">Send</button>
+    <div class="title-section">
+      <h1>✦ NEBULA LOAD ✦</h1>
+      <div class="glow-sub">interstellar progress</div>
     </div>
-</div>
 
-<!-- AUDIO -->
-<audio id="bgMusic" preload="auto" loop>
-    <source src="Venmathiye.mp3" type="audio/mpeg">
-</audio>
+    <!-- main progress ring -->
+    <div class="ring-wrapper">
+      <div class="progress-ring">
+        <svg viewBox="0 0 180 180">
+          <defs>
+            <!-- fancy animated gradient for fill ring -->
+            <linearGradient id="shimmerGradient" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#5f9eff">
+                <animate attributeName="stop-color" values="#5f9eff;#a7c5ff;#5f9eff" dur="4s" repeatCount="indefinite" />
+              </stop>
+              <stop offset="50%" stop-color="#bfdaff">
+                <animate attributeName="stop-color" values="#bfdaff;#ffffff;#bfdaff" dur="5s" repeatCount="indefinite" />
+              </stop>
+              <stop offset="100%" stop-color="#3f74ee">
+                <animate attributeName="stop-color" values="#3f74ee;#7b9eff;#3f74ee" dur="4.5s" repeatCount="indefinite" />
+              </stop>
+              <animate attributeName="x1" values="0;0.4;0" dur="6s" repeatCount="indefinite" />
+              <animate attributeName="y1" values="0;0.7;0" dur="7s" repeatCount="indefinite" />
+            </linearGradient>
+            <!-- subtle drop shadow filter (just for style) -->
+            <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- background ring -->
+          <circle class="ring-bg" cx="90" cy="90" r="80"></circle>
+          <!-- actual progress ring (fill) -->
+          <circle class="ring-fill" cx="90" cy="90" r="80" style="stroke-dasharray: 502.4; stroke-dashoffset: 502.4;"></circle>
+        </svg>
+        <!-- central % readout -->
+        <div class="percentage-badge">
+          <span class="percent-big" id="percentDisplay">0<span style="font-size:2rem;">%</span></span>
+          <span class="status-label" id="statusText">initializing</span>
+        </div>
+      </div>
+    </div>
 
-<audio id="notifySound" preload="auto">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-</audio>
+    <!-- animated bar (cosmic pulse) -->
+    <div class="pulse-bar"></div>
 
-<script>
-// ============================================
-// CONFIGURATION - YOUR GOOGLE SCRIPT URL
-// ============================================
-const CONFIG = {
-    API_URL: 'https://script.google.com/macros/s/AKfycbwOWtKeqQcbBglH8DYTBbJmahMAvem1LAgw-n9Ri_KsqamYnoiqTkL7xSfUCno1bxpV/exec',
-    STORAGE_KEY: 'chat_user_session',
-    POLL_INTERVAL: 3000
-};
+    <!-- controls -->
+    <div class="action-panel">
+      <div class="range-slider">
+        <i></i>
+        <input type="range" id="progressSlider" min="0" max="100" value="0" step="1">
+        <span class="current-value" id="sliderValue"></span>
+      </div>
+    </div>
+  </div>
 
-// ============================================
-// STATE MANAGEMENT
-// ============================================
-const state = {
-    currentUser: null,
-    currentPhoto: '',
-    lastMessageCount: 0,
-    loadingMessages: false,
-    musicPlaying: false,
-    messages: []
-};
+  <script>
+    (function() {
+      // ---- ring geometry ----
+      const radius = 80;
+      const circumference = 2 * Math.PI * radius; // ≈ 502.4
 
-// DOM Elements
-const elements = {
-    loginScreen: document.getElementById('loginScreen'),
-    chatUI: document.getElementById('chatUI'),
-    nameInput: document.getElementById('name'),
-    photoPreview: document.getElementById('photoPreview'),
-    photoUpload: document.getElementById('photoUpload'),
-    loginBtn: document.getElementById('loginBtn'),
-    username: document.getElementById('username'),
-    chatBox: document.getElementById('chatBox'),
-    messageInput: document.getElementById('message'),
-    sendBtn: document.getElementById('sendBtn'),
-    musicBtn: document.getElementById('musicBtn'),
-    bgMusic: document.getElementById('bgMusic'),
-    notifySound: document.getElementById('notifySound')
-};
+      const ringFill = document.querySelector('.ring-fill');
+      const percentDisplay = document.getElementById('percentDisplay');
+      const statusText = document.getElementById('statusText');
+      const slider = document.getElementById('progressSlider');
+      const sliderSpan = document.getElementById('sliderValue');
+      
+      // Current progress value
+      let currentProgress = 0;
+      
+      // Timer variables for press and release
+      let increaseInterval = null;
+      let decreaseInterval = null;
+      
+      // Flag to control redirection - CHANGE THIS TO true TO ENABLE REDIRECTION
+      const enableRedirection = false; // Set to true to enable index.html redirect
 
-// ============================================
-// INITIALIZATION
-// ============================================
-document.addEventListener('DOMContentLoaded', () => {
-    setupEventListeners();
-    checkSavedSession();
-    initAudio();
-});
+      // set initial offset (0% = full hidden)
+      function setProgress(percent) {
+        // clamp between 0 and 100
+        const validPercent = Math.min(100, Math.max(0, percent));
+        const offset = circumference * (1 - validPercent / 100);
+        ringFill.style.strokeDashoffset = offset;
 
-function initAudio() {
-    elements.bgMusic.volume = 0.4;
-    elements.notifySound.volume = 0.4;
-    elements.bgMusic.load();
-    elements.notifySound.load();
-}
+        // update numeric display
+        percentDisplay.innerHTML = validPercent + '<span style="font-size:2rem;">%</span>';
+        sliderSpan.innerText = validPercent + '%';
 
-function setupEventListeners() {
-    elements.nameInput.addEventListener('input', validateLoginForm);
-    elements.photoUpload.addEventListener('change', handlePhotoUpload);
-    elements.messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
-        }
-    });
-}
+        // dynamic status message with some flourish
+        if (validPercent === 0) statusText.innerText = 'stand by';
+        else if (validPercent < 20) statusText.innerText = 'ignition';
+        else if (validPercent < 40) statusText.innerText = 'charging';
+        else if (validPercent < 60) statusText.innerText = 'pulse active';
+        else if (validPercent < 80) statusText.innerText = 'almost there';
+        else if (validPercent < 100) statusText.innerText = 'finalising';
+        else statusText.innerText = '✦ complete ✦';
 
-// ============================================
-// LOGIN FUNCTIONS
-// ============================================
-function handleLogin() {
-    const name = elements.nameInput.value.trim();
-    
-    if (!name) {
-        showNotification('Please enter your name!', 'error');
-        return;
-    }
-    
-    state.currentUser = name;
-    
-    elements.loginScreen.style.transform = 'scale(0.95)';
-    elements.loginScreen.style.opacity = '0';
-    
-    setTimeout(() => {
-        elements.loginScreen.style.display = 'none';
-        elements.chatUI.style.display = 'flex';
-        elements.username.textContent = name;
-        
-        playMusicAutomatically();
-        saveSession();
-        loadMessagesJSONP(); // ✅ USING JSONP NOW
-        
-        elements.loginScreen.style.transform = 'scale(1)';
-        elements.loginScreen.style.opacity = '1';
-    }, 300);
-}
-
-function playMusicAutomatically() {
-    const music = elements.bgMusic;
-    music.volume = 0.4;
-    music.load();
-    
-    const playPromise = music.play();
-    
-    if (playPromise !== undefined) {
-        playPromise
-            .then(() => {
-                state.musicPlaying = true;
-                if (elements.musicBtn) {
-                    elements.musicBtn.textContent = '🎵';
-                }
-            })
-            .catch(() => {
-                state.musicPlaying = false;
-                if (elements.musicBtn) {
-                    elements.musicBtn.textContent = '🔇';
-                }
-            });
-    }
-}
-
-function toggleMusic() {
-    if (state.musicPlaying) {
-        elements.bgMusic.pause();
-        state.musicPlaying = false;
-        elements.musicBtn.textContent = '🔇';
-    } else {
-        elements.bgMusic.play()
-            .then(() => {
-                state.musicPlaying = true;
-                elements.musicBtn.textContent = '🎵';
-            })
-            .catch(() => {
-                showNotification('Click again to play music', 'info');
-            });
-    }
-}
-
-// ============================================
-// SESSION MANAGEMENT
-// ============================================
-function checkSavedSession() {
-    const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
-    if (saved) {
-        try {
-            const session = JSON.parse(saved);
-            if (session.name) {
-                state.currentUser = session.name;
-                state.currentPhoto = session.photo || '';
-                autoLogin(session);
-            }
-        } catch (e) {
-            localStorage.removeItem(CONFIG.STORAGE_KEY);
-        }
-    }
-}
-
-function autoLogin(session) {
-    elements.loginScreen.style.display = 'none';
-    elements.chatUI.style.display = 'flex';
-    elements.username.textContent = session.name;
-    
-    elements.bgMusic.play()
-        .then(() => {
-            state.musicPlaying = true;
-            elements.musicBtn.textContent = '🎵';
-        })
-        .catch(() => {
-            elements.musicBtn.textContent = '🔇';
-        });
-    
-    loadMessagesJSONP(); // ✅ USING JSONP NOW
-    showNotification(`Welcome back, ${session.name}!`, 'success');
-}
-
-function saveSession() {
-    const session = {
-        name: state.currentUser,
-        photo: state.currentPhoto,
-        timestamp: Date.now()
-    };
-    localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(session));
-}
-
-function handleLogout() {
-    localStorage.removeItem(CONFIG.STORAGE_KEY);
-    state.currentUser = null;
-    state.currentPhoto = '';
-    state.lastMessageCount = 0;
-    
-    if (state.musicPlaying) {
-        elements.bgMusic.pause();
-        state.musicPlaying = false;
-    }
-    
-    elements.chatUI.style.display = 'none';
-    elements.loginScreen.style.display = 'block';
-    elements.nameInput.value = '';
-    elements.photoPreview.src = 'https://ui-avatars.com/api/?name=User&background=075E54&color=fff&size=100';
-    elements.loginBtn.disabled = true;
-}
-
-function validateLoginForm() {
-    const name = elements.nameInput.value.trim();
-    elements.loginBtn.disabled = !name;
-}
-
-// ============================================
-// PHOTO UPLOAD
-// ============================================
-async function handlePhotoUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        elements.photoPreview.src = e.target.result;
-        state.currentPhoto = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    
-    showNotification('Photo ready!', 'success');
-}
-
-// ============================================
-// ✅ FIXED: JSONP LOAD MESSAGES (NO CORS)
-// ============================================
-function loadMessagesJSONP() {
-    if (state.loadingMessages) return;
-    
-    state.loadingMessages = true;
-    
-    // Create unique callback name
-    const callbackName = 'jsonp_callback_' + Date.now();
-    
-    // Create script element
-    const script = document.createElement('script');
-    const url = CONFIG.API_URL + '?t=' + Date.now() + '&callback=' + callbackName;
-    
-    // Define callback function
-    window[callbackName] = function(data) {
-        try {
-            const messages = data || [];
-            
-            if (messages.length > state.lastMessageCount) {
-                const newMessages = messages.slice(state.lastMessageCount);
-                
-                newMessages.forEach(msg => {
-                    if (msg.name !== state.currentUser) {
-                        playNotification();
-                    }
-                    appendMessage(msg);
-                });
-                
-                scrollToBottom();
-                state.lastMessageCount = messages.length;
-            }
-        } catch (error) {
-            console.error('JSONP Error:', error);
-        } finally {
-            // Clean up
-            delete window[callbackName];
-            document.body.removeChild(script);
-            state.loadingMessages = false;
-        }
-    };
-    
-    // Handle errors
-    script.onerror = function() {
-        console.error('JSONP request failed');
-        delete window[callbackName];
-        document.body.removeChild(script);
-        state.loadingMessages = false;
-    };
-    
-    script.src = url;
-    document.body.appendChild(script);
-}
-
-function appendMessage(msg) {
-    if (!msg || !msg.name) return;
-    
-    const row = document.createElement('div');
-    row.className = 'msgRow';
-    row.setAttribute('data-owner', msg.name === state.currentUser);
-    
-    if (msg.name !== state.currentUser) {
-        const img = document.createElement('img');
-        img.className = 'profile';
-        img.src = msg.photo || getAvatarUrl(msg.name);
-        img.alt = msg.name;
-        img.onerror = () => { img.src = getAvatarUrl(msg.name); };
-        row.appendChild(img);
-    }
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'message';
-    
-    let timeStr = '';
-    if (msg.time) {
-        try {
-            const msgDate = new Date(msg.time);
-            timeStr = msgDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        } catch {
-            timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
-    } else {
-        timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-    
-    bubble.innerHTML = `
-        <b>${escapeHtml(msg.name)}</b>
-        <div>${escapeHtml(msg.message)}</div>
-        <span class="message-time">${timeStr}</span>
-    `;
-    
-    row.appendChild(bubble);
-    elements.chatBox.appendChild(row);
-}
-
-function handleSendMessage() {
-    const message = elements.messageInput.value.trim();
-    
-    if (!message) {
-        showNotification('Type a message!', 'warning');
-        return;
-    }
-    
-    if (!state.currentUser) {
-        showNotification('Please login first!', 'error');
-        return;
-    }
-    
-    elements.sendBtn.disabled = true;
-    
-    const newMessage = {
-        name: state.currentUser,
-        message: message,
-        photo: state.currentPhoto || '',
-        time: new Date().toISOString()
-    };
-    
-    appendMessage(newMessage);
-    elements.messageInput.value = '';
-    scrollToBottom();
-    
-    // ✅ USING SENDBEACON (NO CORS)
-    saveMessageViaBeacon(newMessage);
-}
-
-// ============================================
-// ✅ FIXED: SENDBEACON (NO CORS ISSUES)
-// ============================================
-function saveMessageViaBeacon(message) {
-    try {
-        const data = JSON.stringify({
-            type: 'message',
-            name: message.name,
-            message: message.message,
-            photo: message.photo,
-            time: message.time
-        });
-        
-        // Use sendBeacon - no CORS issues!
-        if (navigator.sendBeacon) {
-            const blob = new Blob([data], { type: 'application/json' });
-            const sent = navigator.sendBeacon(CONFIG.API_URL, blob);
-            
-            if (sent) {
-                console.log('✅ Message sent via Beacon');
-                showNotification('Message sent!', 'success');
-                state.lastMessageCount++;
-            } else {
-                console.warn('Beacon failed, using fallback');
-                fallbackSend(message);
-            }
-        } else {
-            fallbackSend(message);
+        // also sync slider (avoid infinite loop)
+        if (Math.abs(slider.value - validPercent) > 0.01) {
+          slider.value = validPercent;
         }
         
-    } catch (error) {
-        console.error('Send failed:', error);
-        showNotification('Message saved locally', 'info');
-        state.lastMessageCount++;
-    } finally {
-        elements.sendBtn.disabled = false;
+        // Update current progress
+        currentProgress = validPercent;
+        
+        // Check for 100% completion
+        if (validPercent >= 100 && enableRedirection) {
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 500);
+        }
+      }
+
+      // event: slider change
+      slider.addEventListener('input', function(e) {
+        const val = parseInt(e.target.value, 10);
+        setProgress(val);
+      });
+
+      // generate floating background dots (more liveliness)
+      const dotsContainer = document.getElementById('energyDots');
+      for (let i = 0; i < 14; i++) {
+        const span = document.createElement('span');
+        const size = Math.floor(Math.random() * 10) + 3; // 3-13px
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 8 + 5;
+
+        span.style.width = size + 'px';
+        span.style.height = size + 'px';
+        span.style.left = left + '%';
+        span.style.top = top + '%';
+        span.style.animation = `floatDot ${duration}s infinite alternate ease-in-out`;
+        span.style.animationDelay = delay + 's';
+        span.style.background = `radial-gradient(circle at 30% 30%, #b4d0ff, #4865cf)`;
+        span.style.opacity = 0.2 + Math.random() * 0.5;
+        span.style.boxShadow = `0 0 ${Math.floor(10 + Math.random() * 30)}px #5e83ff`;
+        dotsContainer.appendChild(span);
+      }
+
+      // tiny extra moving particles (glitch sparkles)
+      setInterval(() => {
+        // micro interaction: every 2 seconds pulse the status text color
+        statusText.style.transition = 'color 0.3s, text-shadow 0.3s';
+        statusText.style.color = '#f4f9ff';
+        statusText.style.textShadow = '0 0 20px #90adff, 0 0 40px #3f60d0';
+        setTimeout(() => {
+          statusText.style.color = '#adc6ff';
+          statusText.style.textShadow = 'none';
+        }, 200);
+      }, 3000);
+
+      // initial progress 0
+      setProgress(0);
+
+      // add auto-play incremental demo? But keep minimal: after 1s gently move to 15% to show animation, then return to 0? 
+      // better: showcase animation by sliding after 500ms to 15% and back to 0 (smooth) - playful entry
+      setTimeout(() => {
+        setProgress(90);
+        setTimeout(() => setProgress(0), 700);
+      }, 300);
+
+      // ===== FINGERPRINT SENSOR FUNCTIONALITY =====
+      const fingerprintSensor = document.getElementById('fingerprintSensor');
+      
+      // Function to create mass effect animations
+      function createMassEffect(isPress) {
+        // Create ripple effect
+        const ripple = document.createElement('div');
+        ripple.className = 'mass-effect-ripple';
+        fingerprintSensor.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 800);
+        
+        // Create wave effect
+        const wave = document.createElement('div');
+        wave.className = 'mass-effect-wave';
+        fingerprintSensor.appendChild(wave);
+        setTimeout(() => wave.remove(), 1200);
+        
+        // Create particles (more particles on press, fewer on release)
+        const particleCount = isPress ? 12 : 6;
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'mass-effect-particle';
+          
+          // Random direction
+          const angle = (i / particleCount) * Math.PI * 2;
+          const distance = isPress ? 80 + Math.random() * 60 : 40 + Math.random() * 30;
+          const x = Math.cos(angle) * distance;
+          const y = Math.sin(angle) * distance;
+          
+          particle.style.setProperty('--x', x + 'px');
+          particle.style.setProperty('--y', y + 'px');
+          particle.style.left = '50%';
+          particle.style.top = '50%';
+          particle.style.transform = 'translate(-50%, -50%)';
+          
+          fingerprintSensor.appendChild(particle);
+          setTimeout(() => particle.remove(), 1000);
+        }
+      }
+      
+      // Mouse/Touch down - INCREASE progress
+      fingerprintSensor.addEventListener('mousedown', startIncrease);
+      fingerprintSensor.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        startIncrease(e);
+      });
+      
+      // Mouse/Touch up - DECREASE progress
+      fingerprintSensor.addEventListener('mouseup', startDecrease);
+      fingerprintSensor.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        startDecrease(e);
+      });
+      
+      // Mouse leave (if user moves cursor away while holding) - also decrease
+      fingerprintSensor.addEventListener('mouseleave', startDecrease);
+      
+      // Double-click to reset
+      fingerprintSensor.addEventListener('dblclick', function() {
+        // Clear all intervals
+        if (increaseInterval) clearInterval(increaseInterval);
+        if (decreaseInterval) clearInterval(decreaseInterval);
+        
+        fingerprintSensor.classList.remove('fingerprint-pressed');
+        currentProgress = 0;
+        setProgress(0);
+        
+        // Create a special reset effect (multiple particles)
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => createMassEffect(true), i * 150);
+        }
+      });
+      
+      function startIncrease(e) {
+        e.preventDefault();
+        
+        // Clear any existing decrease interval
+        if (decreaseInterval) {
+          clearInterval(decreaseInterval);
+          decreaseInterval = null;
+        }
+        
+        // If already increasing, don't start again
+        if (increaseInterval) return;
+        
+        // Add pressed class
+        fingerprintSensor.classList.add('fingerprint-pressed');
+        
+        // Create press effect
+        createMassEffect(true);
+        
+        // Start increasing progress every 50ms
+        increaseInterval = setInterval(() => {
+          if (currentProgress < 100) {
+            setProgress(currentProgress + 1);
+          } else {
+            // If reached 100%, clear interval
+            clearInterval(increaseInterval);
+            increaseInterval = null;
+          }
+        }, 50);
+      }
+      
+      function startDecrease(e) {
+        e.preventDefault();
+        
+        // Clear any existing increase interval
+        if (increaseInterval) {
+          clearInterval(increaseInterval);
+          increaseInterval = null;
+        }
+        
+        // If already decreasing, don't start again
+        if (decreaseInterval) return;
+        
+        // Remove pressed class
+        fingerprintSensor.classList.remove('fingerprint-pressed');
+        
+        // Create release effect (smaller)
+        createMassEffect(false);
+        
+        // Start decreasing progress every 70ms (slower than increase)
+        decreaseInterval = setInterval(() => {
+          if (currentProgress > 0) {
+            setProgress(currentProgress - 1);
+          } else {
+            // If reached 0%, clear interval
+            clearInterval(decreaseInterval);
+            decreaseInterval = null;
+          }
+        }, 70);
+      }
+      
+      // Prevent context menu on long press
+      fingerprintSensor.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
+
+    })();
+  </script>
+
+  <!-- additional micro-style: force ring offset recalculation on edge -->
+  <style>
+    .progress-ring {
+      filter: drop-shadow(0 0 22px #4575ff) drop-shadow(0 0 45px #203a90);
     }
-}
-
-// Fallback using fetch with no-cors
-function fallbackSend(message) {
-    fetch(CONFIG.API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            type: 'message',
-            name: message.name,
-            message: message.message,
-            photo: message.photo,
-            time: message.time
-        })
-    })
-    .then(() => {
-        console.log('Message sent via fallback');
-        showNotification('Message sent!', 'success');
-        state.lastMessageCount++;
-    })
-    .catch(() => {
-        console.log('Message saved locally');
-        showNotification('Message saved locally', 'info');
-        state.lastMessageCount++;
-    })
-    .finally(() => {
-        elements.sendBtn.disabled = false;
-    });
-}
-
-function playNotification() {
-    if (elements.notifySound) {
-        elements.notifySound.currentTime = 0;
-        elements.notifySound.play().catch(() => {});
+    .ring-fill {
+      transition: stroke-dashoffset 0.35s cubic-bezier(0.34, 1.5, 0.64, 1);
     }
-}
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-function getAvatarUrl(name) {
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=075E54&color=fff&size=48&bold=true`;
-}
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
-
-function scrollToBottom() {
-    elements.chatBox.scrollTo({
-        top: elements.chatBox.scrollHeight,
-        behavior: 'smooth'
-    });
-}
-
-function showNotification(text, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    
-    const colors = { 
-        error: '#f44336', 
-        warning: '#ff9800', 
-        info: '#2196F3', 
-        success: '#4CAF50' 
-    };
-    
-    notification.style.backgroundColor = colors[type] || colors.info;
-    notification.textContent = text;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.animation = 'slideRight 0.3s reverse';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
-
-// ============================================
-// POLLING FOR NEW MESSAGES (USING JSONP)
-// ============================================
-setInterval(() => {
-    if (elements.chatUI.style.display === 'flex' && navigator.onLine) {
-        loadMessagesJSONP();
+    /* make slider thumb more shiny */
+    .range-slider input::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      border: none;
+      box-shadow: 0 0 20px #78a1ff;
     }
-}, CONFIG.POLL_INTERVAL);
-
-// ============================================
-// ERROR HANDLING
-// ============================================
-window.addEventListener('error', (e) => {
-    if (e.target.tagName === 'IMG' && !e.target.src.includes('ui-avatars')) {
-        e.target.src = getAvatarUrl('User');
+    .current-value {
+      font-feature-settings: "tnum";
     }
-}, true);
-
-window.addEventListener('online', () => {
-    showNotification('Back online!', 'success');
-    loadMessagesJSONP();
-});
-
-window.addEventListener('offline', () => {
-    showNotification('You are offline', 'warning');
-});
-</script>
+  </style>
 </body>
 </html>
