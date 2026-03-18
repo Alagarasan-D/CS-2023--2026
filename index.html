@@ -2,777 +2,586 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>✨ CS-MEMORIES</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
-      min-height: 100vh;
-      background: radial-gradient(circle at 30% 30%, #1a1e2f, #0b0d17);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', system-ui, 'Helvetica Neue', sans-serif;
-      padding: 1rem;
+      min-height:100vh;
+      background:radial-gradient(circle at 30% 30%,#1a1e2f,#0b0d17);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Segoe UI',system-ui,'Helvetica Neue',sans-serif;
+      padding:1rem;
     }
 
-    /* main card – glossy dark glass */
+    /* ── RESPONSIVE BASE ── */
     .loader-card {
-      background: rgba(18, 22, 40, 0.65);
-      backdrop-filter: blur(14px) saturate(180%);
-      -webkit-backdrop-filter: blur(14px) saturate(180%);
-      border-radius: 3.5rem 3.5rem 2.5rem 2.5rem;
-      box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.8), 
-                  inset 0 1px 2px rgba(255, 255, 255, 0.08),
-                  0 0 0 1px rgba(120, 160, 255, 0.15);
-      padding: 3rem 3rem 3.5rem 3rem;
-      width: min(520px, 98%);
-      transition: box-shadow 0.3s;
-      border: 1px solid rgba(110, 150, 255, 0.2);
-      position: relative;
+      background:rgba(18,22,40,0.65);
+      backdrop-filter:blur(14px) saturate(180%);
+      -webkit-backdrop-filter:blur(14px) saturate(180%);
+      border-radius:3.5rem 3.5rem 2.5rem 2.5rem;
+      box-shadow:0 30px 60px -10px rgba(0,0,0,0.8),
+                 inset 0 1px 2px rgba(255,255,255,0.08),
+                 0 0 0 1px rgba(120,160,255,0.15);
+      padding:2.5rem 2.5rem 6rem 2.5rem;
+      width:min(520px,96vw);
+      border:1px solid rgba(110,150,255,0.2);
+      position:relative;
     }
 
-    /* title + floating particles */
+    /* ── TITLE ── */
     .title-section {
-      text-align: center;
-      margin-bottom: 2.2rem;
-      position: relative;
+      text-align:center; margin-bottom:2rem; position:relative;
     }
 
     .title-section h1 {
-      font-size: 2.2rem;
-      font-weight: 500;
-      letter-spacing: 2px;
-      background: linear-gradient(130deg, #c0d4ff, #a6b9ff, #c0e1ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 12px #3f6eff55, 0 0 25px #2f4fef30;
-      margin-bottom: 0.4rem;
-      position: relative;
-      z-index: 3;
+      font-size:clamp(1.2rem,5vw,2.2rem);
+      font-weight:500; letter-spacing:2px;
+      background:linear-gradient(130deg,#c0d4ff,#a6b9ff,#c0e1ff);
+      -webkit-background-clip:text; background-clip:text;
+      color:transparent;
+      text-shadow:0 0 12px #3f6eff55,0 0 25px #2f4fef30;
+      margin-bottom:0.4rem; position:relative; z-index:3;
+      line-height:1.3;
     }
 
     .glow-sub {
-      font-size: 0.9rem;
-      font-weight: 300;
-      color: #9bb3ffcc;
-      text-transform: uppercase;
-      word-spacing: 6px;
-      backdrop-filter: blur(4px);
+      font-size:clamp(0.65rem,2.5vw,0.9rem);
+      font-weight:300; color:#9bb3ffcc;
+      text-transform:uppercase; word-spacing:4px;
     }
 
-    /* progress ring container */
+    /* ── RING ── */
     .ring-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 1.8rem 0 2rem 0;
-      filter: drop-shadow(0 0 18px #3f7eff70);
+      display:flex; justify-content:center; align-items:center;
+      margin:1.5rem 0 1.8rem 0;
+      filter:drop-shadow(0 0 18px #3f7eff70);
     }
 
     .progress-ring {
-      position: relative;
-      width: 180px;
-      height: 180px;
+      position:relative;
+      width:clamp(140px,45vw,180px);
+      height:clamp(140px,45vw,180px);
     }
 
     .progress-ring svg {
-      position: relative;
-      width: 180px;
-      height: 180px;
-      transform: rotate(-90deg);  /* start from top */
+      position:relative;
+      width:100%; height:100%;
+      transform:rotate(-90deg);
     }
 
-    .progress-ring circle {
-      fill: none;
-      stroke-width: 8;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 0.2s ease-out;
-    }
-
-    /* background grey ring */
-    .ring-bg {
-      stroke: rgba(50, 65, 110, 0.4);
-      stroke-width: 8;
-    }
-
-    /* animated progress ring – shimmering gradient + moving light */
+    .progress-ring circle { fill:none; stroke-width:8; stroke-linecap:round; }
+    .ring-bg { stroke:rgba(50,65,110,0.4); stroke-width:8; }
     .ring-fill {
-      stroke: url(#shimmerGradient);
-      stroke-width: 9;
-      filter: drop-shadow(0 0 9px #4d7cff) drop-shadow(0 0 18px #2d4fcf);
-      stroke-dasharray: 502; /* circumference approx (2 * pi * 80 ≈ 502.4) */
-      stroke-dashoffset: 502;
-      transition: stroke-dashoffset 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+      stroke:url(#shimmerGradient); stroke-width:9;
+      filter:drop-shadow(0 0 9px #4d7cff) drop-shadow(0 0 18px #2d4fcf);
+      stroke-dasharray:502.4; stroke-dashoffset:502.4;
+      transition:stroke-dashoffset 0.35s cubic-bezier(0.34,1.5,0.64,1);
     }
 
-    /* inner percentage with floating glow */
     .percentage-badge {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-weight: 500;
-      backdrop-filter: blur(2px);
+      position:absolute; inset:0;
+      display:flex; flex-direction:column;
+      justify-content:center; align-items:center;
+      color:white; font-weight:500;
     }
 
     .percent-big {
-      font-size: 3.3rem;
-      font-weight: 600;
-      background: linear-gradient(145deg, #ffffff, #d6e4ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      line-height: 1;
-      text-shadow: 0 0 25px #6d9eff, 0 0 45px #345bdb;
-      filter: drop-shadow(0 4px 6px #00000050);
-      animation: softPulse 2.2s infinite alternate;
+      font-size:clamp(2.2rem,10vw,3.3rem);
+      font-weight:600;
+      background:linear-gradient(145deg,#ffffff,#d6e4ff);
+      -webkit-background-clip:text; background-clip:text;
+      color:transparent; line-height:1;
+      animation:softPulse 2.2s infinite alternate;
     }
 
-    .percent-big small {
-      font-size: 1.4rem;
-      font-weight: 300;
-      color: #b5cdff;
-      text-shadow: 0 0 20px #4d7aff;
-    }
 
-    .status-label {
-      font-size: 0.95rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: #adc6ff;
-      margin-top: 6px;
-      background: rgba(18, 22, 40, 0.6);
-      padding: 0.3rem 1.4rem;
-      border-radius: 50px;
-      border: 1px solid #3d5488;
-      box-shadow: 0 0 15px #2940aa40;
-      backdrop-filter: blur(8px);
-    }
 
-    /* extra animated glowing bar under ring */
+    /* ── PULSE BAR ── */
     .pulse-bar {
-      width: 220px;
-      height: 5px;
-      background: linear-gradient(90deg, transparent, #6f96ff, #aac3ff, #6f96ff, transparent);
-      margin: 1rem auto 1.8rem auto;
-      border-radius: 10px;
-      opacity: 0.7;
-      animation: barShimmer 2.8s infinite linear;
-      background-size: 200% 100%;
+      width:min(220px,70%);
+      height:5px;
+      background:linear-gradient(90deg,transparent,#6f96ff,#aac3ff,#6f96ff,transparent);
+      margin:0.8rem auto 1.4rem auto;
+      border-radius:10px; opacity:0.7;
+      animation:barShimmer 2.8s infinite linear;
+      background-size:200% 100%;
     }
 
-    /* sleek slider + button row */
-    .action-panel {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 1.2rem;
-      margin-top: 1.2rem;
-    }
-
-    .range-slider {
-      flex: 1 1 200px;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(10, 14, 30, 0.7);
-      padding: 0.5rem 1rem;
-      border-radius: 60px;
-      border: 1px solid #314d8a;
-      backdrop-filter: blur(10px);
-    }
-
-    .range-slider i {
-      color: #9eb9ff;
-      font-style: normal;
-      font-size: 1.2rem;
-      text-shadow: 0 0 8px #4264dc;
-    }
-
-    .range-slider input {
-      width: 140px;
-      height: 6px;
-      -webkit-appearance: none;
-      background: linear-gradient(90deg, #2c3e7e, #748dff, #2c3e7e);
-      border-radius: 10px;
-      outline: none;
-      cursor: pointer;
-      box-shadow: 0 0 15px #3152d0;
-    }
-
-    .range-slider input::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      box-shadow: 0 0 20px #87a9ff, 0 0 40px #ffffffb3;
-      border: 2px solid #b8d0ff;
-      transition: 0.1s;
-    }
-
-    .range-slider input::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-      background: #eef3ff;
-    }
-
-    .current-value {
-      min-width: 3.2rem;
-      text-align: center;
-      font-weight: 600;
-      color: #eef5ff;
-      text-shadow: 0 0 15px #3f7bff;
-    }
-
-    /* floating micro animations (background energy) */
-    .energy-dots {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      border-radius: inherit;
-    }
-
-    .energy-dots span {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: rgba(150, 190, 255, 0.35);
-      border-radius: 50%;
-      box-shadow: 0 0 15px #799cff, 0 0 25px #4264dc;
-      animation: floatDot 7s infinite alternate ease-in-out;
-    }
-
-    /* keyframes */
-    @keyframes softPulse {
-      0% { opacity: 0.9; text-shadow: 0 0 15px #5b80ff, 0 0 30px #2643b3; }
-      100% { opacity: 1; text-shadow: 0 0 25px #96b2ff, 0 0 55px #3e68ff; }
-    }
-
-    @keyframes barShimmer {
-      0% { background-position: 0% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    @keyframes floatDot {
-      0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
-      50% { transform: translate(20px, -15px) scale(1.6); opacity: 0.7; }
-      100% { transform: translate(-20px, 25px) scale(1); opacity: 0.3; }
-    }
-
-    /* random dot positions (generated by js later) */
-    
-    /* ===== FINGERPRINT SENSOR STYLES ===== */
+    /* ── FINGERPRINT SENSOR ── */
     .fingerprint-sensor {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: rgba(30, 40, 70, 0.7);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(100, 150, 255, 0.5);
-      box-shadow: 0 0 20px rgba(70, 130, 255, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 20;
-      animation: fingerprintPulse 2.5s infinite alternate;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+      position:absolute;
+      bottom:clamp(10px,3vh,18px);
+      left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column;
+      align-items:center; gap:7px;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none; z-index:20;
     }
 
-    .fingerprint-sensor:hover {
-      border-color: #7f9eff;
-      box-shadow: 0 0 40px #3f7bff, 0 0 80px #1f3a8a;
-      transform: translateX(-50%) scale(1.08);
+    /* PRESS HERE label */
+    .press-label {
+      font-size:clamp(0.55rem,1.8vw,0.7rem);
+      letter-spacing:0.3em;
+      color:rgba(160,195,255,0.7);
+      text-transform:uppercase;
+      font-family:'Segoe UI',sans-serif;
+      text-align:center;
+      animation:labelPulse 2s ease-in-out infinite alternate;
+      white-space:nowrap;
+    }
+    @keyframes labelPulse {
+      0% { opacity:0.5; color:rgba(160,195,255,0.5); }
+      100%{ opacity:1;   color:rgba(200,220,255,0.9); text-shadow:0 0 12px #6f96ff; }
     }
 
-    .fingerprint-sensor:active {
-      transform: translateX(-50%) scale(0.95);
+    /* Fingerprint circle */
+    .fp-circle {
+      width:clamp(56px,14vw,70px);
+      height:clamp(56px,14vw,70px);
+      border-radius:50%;
+      background:rgba(30,40,70,0.7);
+      backdrop-filter:blur(10px);
+      border:2px solid rgba(100,150,255,0.5);
+      box-shadow:0 0 20px rgba(70,130,255,0.4);
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.3s ease;
+      animation:fingerprintPulse 2.5s infinite alternate;
     }
 
-    .fingerprint-icon {
-      width: 45px;
-      height: 45px;
-      background: radial-gradient(circle at 30% 30%, #aac3ff, #3f74ee);
-      border-radius: 50%;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: iconGlow 3s infinite alternate;
+    .fingerprint-sensor:hover .fp-circle {
+      border-color:#7f9eff;
+      box-shadow:0 0 40px #3f7bff,0 0 80px #1f3a8a;
+      transform:scale(1.08);
+    }
+    .fingerprint-sensor:active .fp-circle { transform:scale(0.95); }
+
+    /* SVG fingerprint lines */
+    .fp-svg {
+      width:clamp(32px,8vw,40px);
+      height:clamp(32px,8vw,40px);
     }
 
-    .fingerprint-icon::before {
-      content: "";
-      position: absolute;
-      width: 25px;
-      height: 25px;
-      background: transparent;
-      border: 2.5px solid rgba(255, 255, 255, 0.95);
-      border-radius: 50%;
-      box-shadow: 0 0 20px #aac3ff, 0 0 40px #4d7cff;
-      animation: rippleEffect 2s infinite;
+    /* fingerprint pressed state */
+    .fingerprint-sensor.pressed .fp-circle {
+      border-color:#ffaa33;
+      box-shadow:0 0 60px #ffaa33,0 0 120px #ff7700;
+      transform:scale(1.1);
     }
 
-    .fingerprint-icon::after {
-      content: "";
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: rgba(255, 255, 255, 1);
-      border-radius: 50%;
-      box-shadow: 0 0 30px white, 0 0 60px #7f9eff;
-      animation: corePulse 1.5s infinite alternate;
+    /* floating orbs */
+    .energy-dots {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%;
+      pointer-events:none; overflow:hidden;
+      border-radius:inherit;
+    }
+    .energy-dots span {
+      position:absolute;
+      width:6px; height:6px;
+      border-radius:50%;
+      animation:floatDot 7s infinite alternate ease-in-out;
     }
 
-    /* Mass effect style animations */
+    /* ── MASS EFFECT ANIMATIONS ── */
     .mass-effect-ripple {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background: rgba(100, 150, 255, 0.3);
-      box-shadow: 0 0 50px #4d7cff, 0 0 100px #1f4dff;
-      animation: massExpand 0.8s ease-out forwards;
-      pointer-events: none;
-      z-index: 25;
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:clamp(56px,14vw,70px); height:clamp(56px,14vw,70px);
+      border-radius:50%;
+      background:rgba(100,150,255,0.3);
+      box-shadow:0 0 50px #4d7cff,0 0 100px #1f4dff;
+      animation:massExpand 0.8s ease-out forwards;
+      pointer-events:none; z-index:25;
     }
-
     .mass-effect-wave {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 70px;
-      height: 70px;
-      border: 3px solid rgba(255, 255, 255, 0.6);
-      border-radius: 50%;
-      box-shadow: 0 0 40px #7f9eff, inset 0 0 40px #3f7bff;
-      animation: massWave 1.2s infinite;
-      pointer-events: none;
-      z-index: 26;
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:clamp(56px,14vw,70px); height:clamp(56px,14vw,70px);
+      border:3px solid rgba(255,255,255,0.6);
+      border-radius:50%;
+      box-shadow:0 0 40px #7f9eff,inset 0 0 40px #3f7bff;
+      animation:massWave 1.2s infinite;
+      pointer-events:none; z-index:26;
     }
-
     .mass-effect-particle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: #aac3ff;
-      border-radius: 50%;
-      box-shadow: 0 0 30px #4d7cff;
-      pointer-events: none;
-      z-index: 30;
-      animation: particleFly 1s ease-out forwards;
+      position:absolute; width:8px; height:8px;
+      background:#aac3ff; border-radius:50%;
+      box-shadow:0 0 30px #4d7cff;
+      pointer-events:none; z-index:30;
+      animation:particleFly 1s ease-out forwards;
     }
 
+    /* ── KEYFRAMES ── */
+    @keyframes softPulse {
+      0%  { opacity:0.9; text-shadow:0 0 15px #5b80ff,0 0 30px #2643b3; }
+      100%{ opacity:1;   text-shadow:0 0 25px #96b2ff,0 0 55px #3e68ff; }
+    }
+    @keyframes barShimmer {
+      0%  { background-position:0% 0; }
+      100%{ background-position:200% 0; }
+    }
+    @keyframes floatDot {
+      0%  { transform:translate(0,0) scale(1); opacity:0.2; }
+      50% { transform:translate(20px,-15px) scale(1.6); opacity:0.7; }
+      100%{ transform:translate(-20px,25px) scale(1); opacity:0.3; }
+    }
     @keyframes fingerprintPulse {
-      0% { box-shadow: 0 0 20px rgba(70, 130, 255, 0.4), 0 0 40px rgba(40, 80, 200, 0.2); }
-      100% { box-shadow: 0 0 50px rgba(70, 130, 255, 0.8), 0 0 100px rgba(40, 80, 200, 0.4); }
+      0%  { box-shadow:0 0 20px rgba(70,130,255,0.4),0 0 40px rgba(40,80,200,0.2); }
+      100%{ box-shadow:0 0 50px rgba(70,130,255,0.8),0 0 100px rgba(40,80,200,0.4); }
     }
-
-    @keyframes iconGlow {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(1.3); }
-    }
-
-    @keyframes rippleEffect {
-      0% { transform: scale(0.8); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 0.4; }
-      100% { transform: scale(0.8); opacity: 0.8; }
-    }
-
-    @keyframes corePulse {
-      0% { transform: scale(0.8); opacity: 0.7; }
-      100% { transform: scale(1.3); opacity: 1; }
-    }
-
     @keyframes massExpand {
-      0% { width: 70px; height: 70px; opacity: 0.8; }
-      100% { width: 200px; height: 200px; opacity: 0; }
+      0%  { width:clamp(56px,14vw,70px); height:clamp(56px,14vw,70px); opacity:0.8; }
+      100%{ width:200px; height:200px; opacity:0; }
     }
-
     @keyframes massWave {
-      0% { width: 70px; height: 70px; opacity: 0.8; border-width: 3px; }
-      100% { width: 180px; height: 180px; opacity: 0; border-width: 1px; }
+      0%  { width:clamp(56px,14vw,70px); height:clamp(56px,14vw,70px); opacity:0.8; border-width:3px; }
+      100%{ width:180px; height:180px; opacity:0; border-width:1px; }
     }
-
     @keyframes particleFly {
-      0% { transform: translate(0, 0) scale(1); opacity: 1; }
-      100% { transform: translate(var(--x, 100px), var(--y, -100px)) scale(0); opacity: 0; }
+      0%  { transform:translate(0,0) scale(1); opacity:1; }
+      100%{ transform:translate(var(--x,100px),var(--y,-100px)) scale(0); opacity:0; }
     }
 
-    .fingerprint-pressed {
-      border-color: #ffaa33;
-      box-shadow: 0 0 60px #ffaa33, 0 0 120px #ff7700;
-      transform: translateX(-50%) scale(1.1);
+    /* ── MOBILE TWEAKS ── */
+    @media(max-width:400px){
+      .loader-card { padding:2rem 1.5rem 5.5rem 1.5rem; border-radius:2.5rem 2.5rem 2rem 2rem; }
+      .title-section h1 { letter-spacing:1px; }
     }
+  
+    /* ── TYPEWRITER MESSAGE BOX ── */
+    .tw-box {
+      min-height: clamp(3.5rem, 8vh, 5rem);
+      margin: 0.6rem auto 0 auto;
+      width: min(420px, 90%);
+      text-align: center;
+      position: relative;
+    }
+    .tw-line {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: clamp(0.7rem, 2.2vw, 0.92rem);
+      letter-spacing: 0.08em;
+      line-height: 1.7;
+      color: rgba(180, 210, 255, 0.75);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      min-height: 1.4em;
+    }
+    .tw-line.visible { opacity: 1; }
+    /* tw-cursor removed */
 
-    .loader-card {
-      padding-bottom: 5rem; /* Make space for fingerprint sensor */
+    /* stage indicator dots */
+    .stage-dots {
+      display: flex;
+      justify-content: center;
+      gap: clamp(5px, 1.5vw, 8px);
+      margin: 0.7rem auto 0 auto;
+    }
+    .stage-dot {
+      width: clamp(5px,1.5vw,7px);
+      height: clamp(5px,1.5vw,7px);
+      border-radius: 50%;
+      background: rgba(80,120,200,0.3);
+      border: 1px solid rgba(100,150,255,0.25);
+      transition: background 0.4s, box-shadow 0.4s, transform 0.3s;
+    }
+    .stage-dot.lit {
+      background: var(--dot-col, #5f9eff);
+      box-shadow: 0 0 8px var(--dot-col, #5f9eff);
+      transform: scale(1.35);
     }
   </style>
 </head>
 <body>
   <div class="loader-card">
-    <!-- decorative floating orbs (added via js) -->
     <div class="energy-dots" id="energyDots"></div>
 
-    <!-- FINGERPRINT SENSOR - BOTTOM CENTER -->
+    <!-- FINGERPRINT — PRESS HERE label + SVG icon -->
     <div class="fingerprint-sensor" id="fingerprintSensor">
-      <div class="fingerprint-icon"></div>
+      <span class="press-label"></span>
+      <div class="fp-circle">
+        <!-- SVG fingerprint lines -->
+        <svg class="fp-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="3" fill="white" opacity="0.9"/>
+          <path d="M20 17 C20 17 17 14 17 11 C17 7.5 18.5 5 20 5 C21.5 5 23 7.5 23 11" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.85"/>
+          <path d="M14 18 C13 16 12 13.5 12 11 C12 6 15.5 2.5 20 2.5 C24.5 2.5 28 6 28 11 C28 13.5 27 16 26 18" stroke="white" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.75"/>
+          <path d="M10 21 C9 19 8.5 15 8.5 11 C8.5 4 13.5 0 20 0 C26.5 0 31.5 4 31.5 11 C31.5 15 31 19 30 21" stroke="rgba(180,210,255,0.8)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.65"/>
+          <path d="M17 22 C16 20.5 15.5 19 15.5 17 C15.5 14 17.5 12 20 12 C22.5 12 24.5 14 24.5 17 C24.5 19 24 20.5 23 22" stroke="white" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.8"/>
+          <path d="M17 26 C15.5 24 14.5 22 14 20" stroke="white" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M23 26 C24.5 24 25.5 22 26 20" stroke="white" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.7"/>
+          <path d="M19 29 C18 27 17.5 26 17 24.5" stroke="rgba(180,210,255,0.9)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
+          <path d="M21 29 C22 27 22.5 26 23 24.5" stroke="rgba(180,210,255,0.9)" stroke-width="1.3" stroke-linecap="round" fill="none" opacity="0.75"/>
+        </svg>
+      </div>
     </div>
 
+    <!-- Title -->
     <div class="title-section">
       <h1>✦ SARAVANAN ❤️AND ❤️ ADHEESH  ✦</h1>
       <div class="glow-sub">💕❤️PRESENT ONE MORE SUPRISE👀</div>
     </div>
 
-    <!-- main progress ring -->
+    <!-- Ring -->
     <div class="ring-wrapper">
       <div class="progress-ring">
         <svg viewBox="0 0 180 180">
           <defs>
-            <!-- fancy animated gradient for fill ring -->
             <linearGradient id="shimmerGradient" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#5f9eff">
-                <animate attributeName="stop-color" values="#5f9eff;#a7c5ff;#5f9eff" dur="4s" repeatCount="indefinite" />
+                <animate attributeName="stop-color" values="#5f9eff;#a7c5ff;#5f9eff" dur="4s" repeatCount="indefinite"/>
               </stop>
               <stop offset="50%" stop-color="#bfdaff">
-                <animate attributeName="stop-color" values="#bfdaff;#ffffff;#bfdaff" dur="5s" repeatCount="indefinite" />
+                <animate attributeName="stop-color" values="#bfdaff;#ffffff;#bfdaff" dur="5s" repeatCount="indefinite"/>
               </stop>
               <stop offset="100%" stop-color="#3f74ee">
-                <animate attributeName="stop-color" values="#3f74ee;#7b9eff;#3f74ee" dur="4.5s" repeatCount="indefinite" />
+                <animate attributeName="stop-color" values="#3f74ee;#7b9eff;#3f74ee" dur="4.5s" repeatCount="indefinite"/>
               </stop>
-              <animate attributeName="x1" values="0;0.4;0" dur="6s" repeatCount="indefinite" />
-              <animate attributeName="y1" values="0;0.7;0" dur="7s" repeatCount="indefinite" />
+              <animate attributeName="x1" values="0;0.4;0" dur="6s" repeatCount="indefinite"/>
+              <animate attributeName="y1" values="0;0.7;0" dur="7s" repeatCount="indefinite"/>
             </linearGradient>
-            <!-- subtle drop shadow filter (just for style) -->
             <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
               <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
             </filter>
           </defs>
-          <!-- background ring -->
-          <circle class="ring-bg" cx="90" cy="90" r="80"></circle>
-          <!-- actual progress ring (fill) -->
-          <circle class="ring-fill" cx="90" cy="90" r="80" style="stroke-dasharray: 502.4; stroke-dashoffset: 502.4;"></circle>
+          <circle class="ring-bg" cx="90" cy="90" r="80"/>
+          <circle class="ring-fill" cx="90" cy="90" r="80" style="stroke-dasharray:502.4;stroke-dashoffset:502.4;"/>
         </svg>
-        <!-- central % readout -->
         <div class="percentage-badge">
           <span class="percent-big" id="percentDisplay">0<span style="font-size:2rem;">%</span></span>
-          <span class="status-label" id="statusText">initializing</span>
+
         </div>
       </div>
     </div>
 
-    <!-- animated bar (cosmic pulse) -->
+    <!-- Pulse bar -->
     <div class="pulse-bar"></div>
 
-    <!-- controls -->
-    <div class="action-panel">
-      <div class="range-slider">
-        <i></i>
-        <input type="range" id="progressSlider" min="0" max="100" value="0" step="1">
-        <span class="current-value" id="sliderValue"></span>
-      </div>
+
+    <!-- TYPEWRITER MESSAGE -->
+    <div class="tw-box">
+      <div class="tw-line" id="twLine"></div>
     </div>
+
+    <!-- STAGE DOTS -->
+    <div class="stage-dots" id="stageDots">
+      <div class="stage-dot" id="dot0"></div>
+      <div class="stage-dot" id="dot1"></div>
+      <div class="stage-dot" id="dot2"></div>
+      <div class="stage-dot" id="dot3"></div>
+      <div class="stage-dot" id="dot4"></div>
+      <div class="stage-dot" id="dot5"></div>
+    </div>
+
+    <!-- NO SLIDER — removed as requested -->
+
   </div>
 
   <script>
     (function() {
-      // ---- ring geometry ----
       const radius = 80;
-      const circumference = 2 * Math.PI * radius; // ≈ 502.4
+      const circumference = 2 * Math.PI * radius;
 
-      const ringFill = document.querySelector('.ring-fill');
+      const ringFill       = document.querySelector('.ring-fill');
       const percentDisplay = document.getElementById('percentDisplay');
-      const statusText = document.getElementById('statusText');
-      const slider = document.getElementById('progressSlider');
-      const sliderSpan = document.getElementById('sliderValue');
-      
-      // Current progress value
+
       let currentProgress = 0;
-      
-      // Timer variables for press and release
       let increaseInterval = null;
       let decreaseInterval = null;
-      
-      // Flag to control redirection - CHANGE THIS TO true TO ENABLE REDIRECTION
-      const enableRedirection = false; // Set to true to enable index.html redirect
+      const enableRedirection = true;
 
-      // set initial offset (0% = full hidden)
+
+      // ── TYPEWRITER MESSAGES per stage ──
+      const stageMessages = [
+        { at:  0, msg: 'Hold the fingerprint sensor to begin your journey... ✨',      col:'#5f9eff' },
+        { at: 20, msg: 'Something magical is being brewed just for you... 💫',          col:'#00d4ff' },
+        { at: 40, msg: 'The surprise is taking shape — keep holding! 🌟',              col:'#00ff88' },
+        { at: 60, msg: 'You are getting closer... things are getting very interesting! 🔥', col:'#ffd700' },
+        { at: 80, msg: 'Almost there! The surprise is nearly ready for you... 🎉',     col:'#ff8c00' },
+        { at:100, msg: 'The surprise is READY! Your wait was worth it! 💕🎊',          col:'#ffffff' },
+      ];
+
+      let lastStage = -1;
+      let twInterval = null;
+
+      function getStageIdx(p) {
+        let idx = 0;
+        for (let i = 0; i < stageMessages.length; i++) {
+          if (p >= stageMessages[i].at) idx = i;
+        }
+        return idx;
+      }
+
+      function typeMessage(text, color) {
+        const el = document.getElementById('twLine');
+        if (!el) return;
+        if (twInterval) { clearInterval(twInterval); twInterval = null; }
+        el.classList.remove('visible');
+        el.style.color = color || 'rgba(180,210,255,0.75)';
+        el.textContent = text;
+        // Fade in instantly
+        requestAnimationFrame(() => el.classList.add('visible'));
+      }
+
+      function updateStageDots(stageIdx, col) {
+        for (let i = 0; i < 6; i++) {
+          const d = document.getElementById('dot' + i);
+          if (!d) continue;
+          if (i <= stageIdx) {
+            d.classList.add('lit');
+            d.style.setProperty('--dot-col', col);
+          } else {
+            d.classList.remove('lit');
+          }
+        }
+      }
+
+      // Color stages: 0→blue, 20→cyan, 40→green, 60→yellow, 80→orange, 100→white
+      const colorStages = [
+        { at:  0, c1:'#3f74ee', c2:'#5f9eff', c3:'#bfdaff', glow:'#4d7cff' },
+        { at: 20, c1:'#00c8e0', c2:'#40e0f0', c3:'#a0f4ff', glow:'#00d4ff' },
+        { at: 40, c1:'#00cc66', c2:'#33ee88', c3:'#aaffd4', glow:'#00ff88' },
+        { at: 60, c1:'#cccc00', c2:'#ffff33', c3:'#ffffaa', glow:'#ffd700' },
+        { at: 80, c1:'#ff6600', c2:'#ff9933', c3:'#ffcc88', glow:'#ff8c00' },
+        { at:100, c1:'#cccccc', c2:'#ffffff', c3:'#ffffff', glow:'#ffffff' },
+      ];
+
+      function getColors(p) {
+        for (let i = colorStages.length - 1; i >= 0; i--) {
+          if (p >= colorStages[i].at) return colorStages[i];
+        }
+        return colorStages[0];
+      }
+
+      function updateRingColor(p) {
+        const col = getColors(p);
+        // Update SVG gradient stops directly
+        const stops = document.querySelectorAll('#shimmerGradient stop');
+        if (stops[0]) stops[0].setAttribute('stop-color', col.c1);
+        if (stops[1]) stops[1].setAttribute('stop-color', col.c2);
+        if (stops[2]) stops[2].setAttribute('stop-color', col.c3);
+        // Update ring glow filter color
+        ringFill.style.filter = `drop-shadow(0 0 9px ${col.glow}) drop-shadow(0 0 18px ${col.glow}88)`;
+        // Update ring wrapper glow
+        const wrapper = document.querySelector('.ring-wrapper');
+        if (wrapper) wrapper.style.filter = `drop-shadow(0 0 18px ${col.glow}70)`;
+        // Update percent number color
+        percentDisplay.style.background = `linear-gradient(145deg, #ffffff, ${col.c2})`;
+        percentDisplay.style.webkitBackgroundClip = 'text';
+        percentDisplay.style.backgroundClip = 'text';
+      }
+
       function setProgress(percent) {
-        // clamp between 0 and 100
         const validPercent = Math.min(100, Math.max(0, percent));
         const offset = circumference * (1 - validPercent / 100);
         ringFill.style.strokeDashoffset = offset;
-
-        // update numeric display
         percentDisplay.innerHTML = validPercent + '<span style="font-size:2rem;">%</span>';
-        sliderSpan.innerText = validPercent + '%';
-
-        // dynamic status message with some flourish
-       if (validPercent === 0) statusText.innerText = 'Getting Ready...';
-       else if (validPercent < 20) statusText.innerText = 'Something is Brewing...';
-       else if (validPercent < 40) statusText.innerText = 'Magic in Progress...';
-       else if (validPercent < 60) statusText.innerText = 'Things are Getting Interesting...';
-       else if (validPercent < 80) statusText.innerText = 'Almost There...';
-       else if (validPercent < 100) statusText.innerText = 'Preparing the Surprise...';
-       else statusText.innerText = 'Surprise Ready!';
-
-        // also sync slider (avoid infinite loop)
-        if (Math.abs(slider.value - validPercent) > 0.01) {
-          slider.value = validPercent;
+        updateRingColor(validPercent);
+        // Check stage transition and fire typewriter
+        const stageIdx = getStageIdx(validPercent);
+        if (stageIdx !== lastStage) {
+          lastStage = stageIdx;
+          const stage = stageMessages[stageIdx];
+          typeMessage(stage.msg, stage.col);
+          updateStageDots(stageIdx, stage.col);
         }
-        
-        // Update current progress
         currentProgress = validPercent;
-        
-        // Check for 100% completion
         if (validPercent >= 100 && enableRedirection) {
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 500);
+          setTimeout(() => { window.location.href = 'main.html'; }, 500);
         }
       }
 
-      // event: slider change
-      slider.addEventListener('input', function(e) {
-        const val = parseInt(e.target.value, 10);
-        setProgress(val);
-      });
-
-      // generate floating background dots (more liveliness)
+      // floating background dots
       const dotsContainer = document.getElementById('energyDots');
       for (let i = 0; i < 14; i++) {
         const span = document.createElement('span');
-        const size = Math.floor(Math.random() * 10) + 3; // 3-13px
-        const left = Math.random() * 100;
-        const top = Math.random() * 100;
-        const delay = Math.random() * 5;
-        const duration = Math.random() * 8 + 5;
-
-        span.style.width = size + 'px';
+        const size = Math.floor(Math.random() * 10) + 3;
+        span.style.width  = size + 'px';
         span.style.height = size + 'px';
-        span.style.left = left + '%';
-        span.style.top = top + '%';
-        span.style.animation = `floatDot ${duration}s infinite alternate ease-in-out`;
-        span.style.animationDelay = delay + 's';
-        span.style.background = `radial-gradient(circle at 30% 30%, #b4d0ff, #4865cf)`;
-        span.style.opacity = 0.2 + Math.random() * 0.5;
-        span.style.boxShadow = `0 0 ${Math.floor(10 + Math.random() * 30)}px #5e83ff`;
+        span.style.left   = Math.random() * 100 + '%';
+        span.style.top    = Math.random() * 100 + '%';
+        span.style.animation = `floatDot ${Math.random()*8+5}s infinite alternate ease-in-out`;
+        span.style.animationDelay = Math.random() * 5 + 's';
+        span.style.background  = `radial-gradient(circle at 30% 30%,#b4d0ff,#4865cf)`;
+        span.style.opacity     = 0.2 + Math.random() * 0.5;
+        span.style.boxShadow   = `0 0 ${Math.floor(10+Math.random()*30)}px #5e83ff`;
         dotsContainer.appendChild(span);
       }
 
-      // tiny extra moving particles (glitch sparkles)
-      setInterval(() => {
-        // micro interaction: every 2 seconds pulse the status text color
-        statusText.style.transition = 'color 0.3s, text-shadow 0.3s';
-        statusText.style.color = '#f4f9ff';
-        statusText.style.textShadow = '0 0 20px #90adff, 0 0 40px #3f60d0';
-        setTimeout(() => {
-          statusText.style.color = '#adc6ff';
-          statusText.style.textShadow = 'none';
-        }, 200);
-      }, 3000);
 
-      // initial progress 0
+
       setProgress(0);
+      setTimeout(() => { setProgress(90); setTimeout(()=>setProgress(0),700); }, 300);
 
-      // add auto-play incremental demo? But keep minimal: after 1s gently move to 15% to show animation, then return to 0? 
-      // better: showcase animation by sliding after 500ms to 15% and back to 0 (smooth) - playful entry
-      setTimeout(() => {
-        setProgress(90);
-        setTimeout(() => setProgress(0), 700);
-      }, 300);
-
-      // ===== FINGERPRINT SENSOR FUNCTIONALITY =====
+      /* ── FINGERPRINT ── */
       const fingerprintSensor = document.getElementById('fingerprintSensor');
-      
-      // Function to create mass effect animations
+
       function createMassEffect(isPress) {
-        // Create ripple effect
+        const sz = window.innerWidth < 400 ? '56px' : '70px';
         const ripple = document.createElement('div');
         ripple.className = 'mass-effect-ripple';
-        fingerprintSensor.appendChild(ripple);
+        fingerprintSensor.querySelector('.fp-circle').appendChild(ripple);
         setTimeout(() => ripple.remove(), 800);
-        
-        // Create wave effect
         const wave = document.createElement('div');
         wave.className = 'mass-effect-wave';
-        fingerprintSensor.appendChild(wave);
+        fingerprintSensor.querySelector('.fp-circle').appendChild(wave);
         setTimeout(() => wave.remove(), 1200);
-        
-        // Create particles (more particles on press, fewer on release)
-        const particleCount = isPress ? 12 : 6;
-        for (let i = 0; i < particleCount; i++) {
+        const count = isPress ? 12 : 6;
+        for (let i = 0; i < count; i++) {
           const particle = document.createElement('div');
           particle.className = 'mass-effect-particle';
-          
-          // Random direction
-          const angle = (i / particleCount) * Math.PI * 2;
-          const distance = isPress ? 80 + Math.random() * 60 : 40 + Math.random() * 30;
-          const x = Math.cos(angle) * distance;
-          const y = Math.sin(angle) * distance;
-          
-          particle.style.setProperty('--x', x + 'px');
-          particle.style.setProperty('--y', y + 'px');
-          particle.style.left = '50%';
-          particle.style.top = '50%';
-          particle.style.transform = 'translate(-50%, -50%)';
-          
-          fingerprintSensor.appendChild(particle);
+          const angle = (i / count) * Math.PI * 2;
+          const dist  = isPress ? 80 + Math.random()*60 : 40 + Math.random()*30;
+          particle.style.setProperty('--x', Math.cos(angle)*dist+'px');
+          particle.style.setProperty('--y', Math.sin(angle)*dist+'px');
+          particle.style.left = '50%'; particle.style.top = '50%';
+          particle.style.transform = 'translate(-50%,-50%)';
+          fingerprintSensor.querySelector('.fp-circle').appendChild(particle);
           setTimeout(() => particle.remove(), 1000);
         }
       }
-      
-      // Mouse/Touch down - INCREASE progress
-      fingerprintSensor.addEventListener('mousedown', startIncrease);
-      fingerprintSensor.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        startIncrease(e);
-      });
-      
-      // Mouse/Touch up - DECREASE progress
-      fingerprintSensor.addEventListener('mouseup', startDecrease);
-      fingerprintSensor.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        startDecrease(e);
-      });
-      
-      // Mouse leave (if user moves cursor away while holding) - also decrease
-      fingerprintSensor.addEventListener('mouseleave', startDecrease);
-      
-      // Double-click to reset
-      fingerprintSensor.addEventListener('dblclick', function() {
-        // Clear all intervals
+
+      fingerprintSensor.addEventListener('mousedown',   startIncrease);
+      fingerprintSensor.addEventListener('touchstart',  e=>{ e.preventDefault(); startIncrease(e); });
+      fingerprintSensor.addEventListener('mouseup',     startDecrease);
+      fingerprintSensor.addEventListener('touchend',    e=>{ e.preventDefault(); startDecrease(e); });
+      fingerprintSensor.addEventListener('mouseleave',  startDecrease);
+      fingerprintSensor.addEventListener('dblclick', () => {
         if (increaseInterval) clearInterval(increaseInterval);
         if (decreaseInterval) clearInterval(decreaseInterval);
-        
-        fingerprintSensor.classList.remove('fingerprint-pressed');
-        currentProgress = 0;
+        fingerprintSensor.classList.remove('pressed');
         setProgress(0);
-        
-        // Create a special reset effect (multiple particles)
-        for (let i = 0; i < 5; i++) {
-          setTimeout(() => createMassEffect(true), i * 150);
-        }
+        for (let i=0;i<5;i++) setTimeout(()=>createMassEffect(true),i*150);
       });
-      
+      fingerprintSensor.addEventListener('contextmenu', e=>e.preventDefault());
+
       function startIncrease(e) {
-        e.preventDefault();
-        
-        // Clear any existing decrease interval
-        if (decreaseInterval) {
-          clearInterval(decreaseInterval);
-          decreaseInterval = null;
-        }
-        
-        // If already increasing, don't start again
+        if(e) e.preventDefault();
+        if (decreaseInterval) { clearInterval(decreaseInterval); decreaseInterval=null; }
         if (increaseInterval) return;
-        
-        // Add pressed class
-        fingerprintSensor.classList.add('fingerprint-pressed');
-        
-        // Create press effect
+        fingerprintSensor.classList.add('pressed');
         createMassEffect(true);
-        
-        // Start increasing progress every 50ms
         increaseInterval = setInterval(() => {
-          if (currentProgress < 100) {
-            setProgress(currentProgress + 1);
-          } else {
-            // If reached 100%, clear interval
-            clearInterval(increaseInterval);
-            increaseInterval = null;
-          }
+          if (currentProgress < 100) { setProgress(currentProgress+1); }
+          else { clearInterval(increaseInterval); increaseInterval=null; }
         }, 50);
       }
-      
+
       function startDecrease(e) {
-        e.preventDefault();
-        
-        // Clear any existing increase interval
-        if (increaseInterval) {
-          clearInterval(increaseInterval);
-          increaseInterval = null;
-        }
-        
-        // If already decreasing, don't start again
+        if(e) e.preventDefault();
+        if (increaseInterval) { clearInterval(increaseInterval); increaseInterval=null; }
         if (decreaseInterval) return;
-        
-        // Remove pressed class
-        fingerprintSensor.classList.remove('fingerprint-pressed');
-        
-        // Create release effect (smaller)
+        fingerprintSensor.classList.remove('pressed');
         createMassEffect(false);
-        
-        // Start decreasing progress every 70ms (slower than increase)
         decreaseInterval = setInterval(() => {
-          if (currentProgress > 0) {
-            setProgress(currentProgress - 1);
-          } else {
-            // If reached 0%, clear interval
-            clearInterval(decreaseInterval);
-            decreaseInterval = null;
-          }
+          if (currentProgress > 0) { setProgress(currentProgress-1); }
+          else { clearInterval(decreaseInterval); decreaseInterval=null; }
         }, 70);
       }
-      
-      // Prevent context menu on long press
-      fingerprintSensor.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-      });
 
     })();
   </script>
-
-  <!-- additional micro-style: force ring offset recalculation on edge -->
-  <style>
-    .progress-ring {
-      filter: drop-shadow(0 0 22px #4575ff) drop-shadow(0 0 45px #203a90);
-    }
-    .ring-fill {
-      transition: stroke-dashoffset 0.35s cubic-bezier(0.34, 1.5, 0.64, 1);
-    }
-    /* make slider thumb more shiny */
-    .range-slider input::-moz-range-thumb {
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      border: none;
-      box-shadow: 0 0 20px #78a1ff;
-    }
-    .current-value {
-      font-feature-settings: "tnum";
-    }
-  </style>
 </body>
 </html>
